@@ -1,4 +1,3 @@
-import requests
 import twitter
 import os
 
@@ -17,6 +16,9 @@ def get_auth_info(consumer_key, consumer_secret, access_token_key, access_token_
 	return consumer_key, consumer_secret, access_token_key, access_token_secret
 
 def get_user_object(username):
+	""" username: a string of the username we want to create an object for.
+		Returns a twitter user object based on the inputed username.
+	"""
 	return api.GetUser(screen_name=username)
 
 # # for production
