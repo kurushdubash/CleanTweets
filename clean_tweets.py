@@ -1,11 +1,12 @@
 import twitter
+from string import ascii_letters
 from bad_words import bad_words # Gets a list of all the bad words
 
 # auth stuff for testing purposes
 api = twitter.Api(consumer_key='VzoDn3WeXht6OkS2HvNueflzL',
-                      consumer_secret='wAmFnCv4w3o5dV4gBSzCTTJbMaDaUWoMKBrRPesljECUPJMzKW',
-                      access_token_key='46310347-WAJLn4UDyfxlupMy7Q1nNoyQ4F4OpjZdjaVCPtCGJ',
-                      access_token_secret='FObEKM6jMrYX884j8TlzoywREW5fI1A7ZfSQFa8xY41AB')
+	  consumer_secret='wAmFnCv4w3o5dV4gBSzCTTJbMaDaUWoMKBrRPesljECUPJMzKW',
+	  access_token_key='46310347-WAJLn4UDyfxlupMy7Q1nNoyQ4F4OpjZdjaVCPtCGJ',
+	  access_token_secret='FObEKM6jMrYX884j8TlzoywREW5fI1A7ZfSQFa8xY41AB')
 
 # # for production
 # api = twitter.Apit(consumer_key=consumer_key, 
@@ -43,8 +44,49 @@ def is_tweet_bad(tweet):
 		Returns true if tweet contains bad word, false otherwise
 	""" 
 	text = tweet.text
-	tweet_words = text.split()
-	for word in tweet_words:
+	tweet_words = list(set(text.split()))
+	ascii_tweet = strip_non_ascii(tweet_words)
+	ascii_tweet = filter(None, ascii_tweet)
+	for word in ascii_tweet:
 		if word in bad_words:
 			return True
 	return False
+
+def strip_non_ascii(list_of_words):
+	""" tweets : a list of 
+		cleans the words to remove non-ascii characters
+		returns a list of cleaned words
+	"""
+	words = []
+	count = 0
+	while (count < len(list_of_words)):
+		word = ''
+		for char in list_of_words[count]:
+			if char in ascii_letters: # if the character is an ascii char digit, add it to our word
+				word += char
+			else:
+				words.append(word)
+				word = ''
+		words.append(word)
+		count+=1
+	return words
+
+def get_tweets(user):
+	""" user : a Twitter user object
+		Returns a list of tweets for the specified user 
+	"""
+	return api.GetUserTimeline(screen_name=user.screen_name, count=10)
+
+def check_tweets(tweets):
+	""" tweets : a list of Twitter Status objects
+		goes through a list of twitter objects and checks to see if they are bad or not
+	""" 
+	for tweet in tweets:
+		if is_tweet_bad(tweet):
+			explicit_tweets.append(tweet)
+
+# # For testing purposes
+# user = get_user_object('kurushdubash')
+# tweets= get_tweets(user)
+# check_tweets(tweets)
+# clean_tweets()
