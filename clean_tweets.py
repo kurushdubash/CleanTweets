@@ -1,5 +1,5 @@
 import twitter
-import os
+from bad_words import bad_words # Gets a list of all the bad words
 
 # auth stuff for testing purposes
 api = twitter.Api(consumer_key='VzoDn3WeXht6OkS2HvNueflzL',
@@ -7,9 +7,12 @@ api = twitter.Api(consumer_key='VzoDn3WeXht6OkS2HvNueflzL',
                       access_token_key='46310347-WAJLn4UDyfxlupMy7Q1nNoyQ4F4OpjZdjaVCPtCGJ',
                       access_token_secret='FObEKM6jMrYX884j8TlzoywREW5fI1A7ZfSQFa8xY41AB')
 
+# # for production
+# api = twitter.Apit(consumer_key=consumer_key, 
+# 					  consumer_secret=consumer_secret, 
+# 					  access_token_key=access_token_key, 
+# 					  access_token_secret=access_token_secret)
 
-# global var for bad words
-bad_words = []
 explicit_tweets = [] # a list of twitter status objects that we coined as 'bad'
 
 def get_auth_info(consumer_key, consumer_secret, access_token_key, access_token_secret):
@@ -21,26 +24,6 @@ def get_user_object(username):
 	"""
 	return api.GetUser(screen_name=username)
 
-# # for production
-# api = twitter.Apit(consumer_key=consumer_key, 
-# 					  consumer_secret=consumer_secret, 
-# 					  access_token_key=access_token_key, 
-# 					  access_token_secret=access_token_secret)
-
-
-def get_bad_words():
-	""" Finds all the bad words from a local directory and puts it into our 
-		global variable "bad_words" list
-	"""
-	sub_dir = 'bad_words' # sub directory name
-	for filename in os.listdir(sub_dir): # for each file in our sub directory
-		if filename == "en": # for testing purposes we'll only work with english words
-		    with open(os.path.join(sub_dir, filename), "r") as f:
-		        for line in f:
-		        	word = line[: len(line) - 1]
-		        	bad_words.append(word)
-
-get_bad_words()
 
 def clean_tweets():
 	""" Looks at the list of twitter IDs in explict_tweet_ids and removes them.
