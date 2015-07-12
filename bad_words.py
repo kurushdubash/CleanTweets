@@ -13,4 +13,4 @@ def get_bad_words():
 		        	words.append(word)
 	return words
 
-bad_words = get_bad_words
+bad_words = get_bad_words()
