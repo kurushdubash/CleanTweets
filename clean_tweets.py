@@ -85,8 +85,8 @@ def clean_tweets():
 		print "Deleting Tweet: " + tweet.text
 		explicit_tweets.remove(tweet)
 
-# For testing purposes
-user = get_user_object('kurushdubash')
-tweets= get_tweets(user)
-check_tweets(tweets)
-clean_tweets()
+# # For testing purposes
+# user = get_user_object('kurushdubash')
+# tweets= get_tweets(user)
+# check_tweets(tweets)
+# clean_tweets()
