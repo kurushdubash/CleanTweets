@@ -11,10 +11,10 @@ base_url='https://api.twitter.com/1/',
 request_token_url='https://api.twitter.com/oauth/request_token',
 access_token_url='https://api.twitter.com/oauth/access_token',
 authorize_url='https://api.twitter.com/oauth/authenticate',
-#consumer_key='VzoDn3WeXht6OkS2HvNueflzL',
-#consumer_secret='wAmFnCv4w3o5dV4gBSzCTTJbMaDaUWoMKBrRPesljECUPJMzKW')
-consumer_key='xBeXxg9lyElUgwZT6AZ0A',
-consumer_secret='aawnSpNTOVuDCjx7HMh6uSXetjNN8zWLpZwCEU4LBrk')
+consumer_key='VzoDn3WeXht6OkS2HvNueflzL',
+consumer_secret='wAmFnCv4w3o5dV4gBSzCTTJbMaDaUWoMKBrRPesljECUPJMzKW')
+#consumer_key='xBeXxg9lyElUgwZT6AZ0A',
+#consumer_secret='aawnSpNTOVuDCjx7HMh6uSXetjNN8zWLpZwCEU4LBrk')
 
 @app.route("/")
 def hello():
