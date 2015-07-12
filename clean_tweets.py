@@ -10,7 +10,7 @@ api = twitter.Api(consumer_key='VzoDn3WeXht6OkS2HvNueflzL',
 
 # global var for bad words
 bad_words = []
-explict_tweet_ids = [] 
+explicit_tweets = {} # a dict with ids as keys and tweets as values
 
 def get_auth_info(consumer_key, consumer_secret, access_token_key, access_token_secret):
 	return consumer_key, consumer_secret, access_token_key, access_token_secret
@@ -42,4 +42,10 @@ def get_bad_words():
 
 get_bad_words()
 
-
+def clean_tweets():
+	""" Looks at the list of twitter IDs in explict_tweet_ids and removes them.
+	"""
+	for id, tweet in explicit_tweets.items():
+		api.DestroyStatus(id)
+		print "Deleting Tweet: " + tweet
+		del explicit_tweets[id]
