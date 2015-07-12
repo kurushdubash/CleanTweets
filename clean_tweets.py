@@ -29,13 +29,11 @@ def get_user_object(username):
 	"""
 	return api.GetUser(screen_name=username)
 
-def clean_tweets():
-	""" Looks at the list of twitter IDs in explict_tweet_ids and removes them.
+def get_tweets(user):
+	""" user : a Twitter user object
+		Returns a list of tweets for the specified user 
 	"""
-	for tweet in explicit_tweets:
-		api.DestroyStatus(tweet.id)
-		print "Deleting Tweet: " + tweet.text
-		explicit_tweets.remove(tweet)
+	return api.GetUserTimeline(screen_name=user.screen_name, count=10)
 
 def is_tweet_bad(tweet):
 	""" tweet : a Twitter Status object
@@ -71,12 +69,6 @@ def strip_non_ascii(list_of_words):
 		count+=1
 	return words
 
-def get_tweets(user):
-	""" user : a Twitter user object
-		Returns a list of tweets for the specified user 
-	"""
-	return api.GetUserTimeline(screen_name=user.screen_name, count=10)
-
 def check_tweets(tweets):
 	""" tweets : a list of Twitter Status objects
 		goes through a list of twitter objects and checks to see if they are bad or not
@@ -84,9 +76,17 @@ def check_tweets(tweets):
 	for tweet in tweets:
 		if is_tweet_bad(tweet):
 			explicit_tweets.append(tweet)
+			
+def clean_tweets():
+	""" Looks at the list of twitter IDs in explict_tweet_ids and removes them.
+	"""
+	for tweet in explicit_tweets:
+		api.DestroyStatus(tweet.id)
+		print "Deleting Tweet: " + tweet.text
+		explicit_tweets.remove(tweet)
 
-# # For testing purposes
-# user = get_user_object('kurushdubash')
-# tweets= get_tweets(user)
-# check_tweets(tweets)
-# clean_tweets()
+# For testing purposes
+user = get_user_object('kurushdubash')
+tweets= get_tweets(user)
+check_tweets(tweets)
+clean_tweets()
