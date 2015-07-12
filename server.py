@@ -5,11 +5,11 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello():
-    return "Hello World!"
+    return render_template('sign_in.html')
 
-@app.route("/help/")
+@app.route("/hello/")
 def help_page(name=None):
-	return render_template('help.html', name=name)
+	return render_template('hello_world.html')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, port=5000)
