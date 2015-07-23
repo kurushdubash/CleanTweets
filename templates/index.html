@@ -2,6 +2,16 @@
 {% block body %}
 {% if g.user %}
     <center>
+        <br/> 
+        <p><a class="btn btn-warning btn-xlg" href="#" role="button">
+            <i class="fa fa-search-plus fa-2x"></i>
+            &nbsp;&nbsp;&nbsp;
+            Find my Dirty Tweets!</a></p>
+        <br/>
+
+        <br/>
+        <br/>
+
         <h3>
             Hello {{ g.user.screen_name }}!  Wanna tweet something?
         </h3>
@@ -18,8 +28,6 @@
         </form>
     </center>
     {% if tweets %}
-        <br/> 
-        <br/>
 
         <h2>Your Timeline</h2>
         <ul>
@@ -38,4 +46,18 @@
     </center>
 
 {% endif %}
+    <br/> <br/> <br/>
+    <div class='panel-footer'>
+        <center>
+            <h3>
+                <i class="fa fa-refresh fa-spin"></i>
+                &nbsp;
+                CleanTweets
+            </h3>
+            <h5>
+                Engineered by Hassaan Shakeel, Kurush Dubash, and Andrew Shao
+            </h5>
+
+        <center>
+    </div>
 {% endblock %}
