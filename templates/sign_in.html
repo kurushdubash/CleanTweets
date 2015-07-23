@@ -26,27 +26,28 @@
       <header id="top" class="header">
         <div class="text-vertical-center">
             <center>
-            <h1>Clean Tweets</h1>
-            <h3>Remove all of your offensive and incriminating tweets!</h3>
-          </center>
+                <h1>Clean Tweets</h1>
+                <h3>Remove all of your offensive and incriminating tweets!</h3>
+            </center>
             <br>
 
             <ul class=navigation>
-              <li><a href="{{ url_for('index') }}">overview</a></li>
-              {% if g.user %}
-              <li><a href="{{ url_for('logout') }}">sign out [{{ g.user.screen_name}}]</a></li>
-              {% else %}
-              <li><a href="{{ url_for('login') }}">Sign in!</a></li>
-              {% endif %}
+                <li><a href="{{ url_for('index') }}">overview</a></li>
+                {% if g.user %}
+                    <li><a href="{{ url_for('logout') }}">Sign out [{{ g.user.screen_name}}]</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Sign in!</a></li>
+                {% endif %}
             </ul>
+
             {% for message in get_flashed_messages() %}
               <p class=message>{{ message }}</p>
             {% endfor %}
-            {% block body %}{% endblock %}
         </div>
       </header>
 
     
+{% block body %}{% endblock %}
 
   </body>
 </html>

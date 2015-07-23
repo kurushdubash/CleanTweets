@@ -43,7 +43,7 @@ def index():
         if resp.status == 200:
             tweets = resp.data
         else:
-            flash('Unable to load tweets from Twitter.')
+            flash('Unable to load tweets from Twitter. Error code: %d' %(resp.status))
     return render_template('index.html', tweets=tweets)
 
 
@@ -89,4 +89,4 @@ def oauthorized():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', debug=True, port=5000)
