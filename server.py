@@ -1,59 +1,92 @@
 from flask import Flask
-from flask import render_template
-from flask_oauth import OAuth
-from flask import session, redirect, url_for, flash, request
+from flask import g, session, request, url_for, flash
+from flask import redirect, render_template
+from flask_oauthlib.client import OAuth
+
 
 app = Flask(__name__)
-app.secret_key="testingkey"
-oauth = OAuth()
-twitter = oauth.remote_app('twitter',
-base_url='https://api.twitter.com/1/',
-request_token_url='https://api.twitter.com/oauth/request_token',
-access_token_url='https://api.twitter.com/oauth/access_token',
-authorize_url='https://api.twitter.com/oauth/authenticate',
-consumer_key='VzoDn3WeXht6OkS2HvNueflzL',
-consumer_secret='wAmFnCv4w3o5dV4gBSzCTTJbMaDaUWoMKBrRPesljECUPJMzKW')
-#consumer_key='xBeXxg9lyElUgwZT6AZ0A',
-#consumer_secret='aawnSpNTOVuDCjx7HMh6uSXetjNN8zWLpZwCEU4LBrk')
+app.debug = True
+app.secret_key = 'development'
 
-@app.route("/")
-def hello():
-    return render_template('sign_in.html')
+oauth = OAuth(app)
 
-@app.route("/hello/")
-def help_page(name=None):
-	return render_template('hello_world.html')
+twitter = oauth.remote_app(
+    'twitter',
+    consumer_key='5ZcYijaOIKQRVhfOqCsleC1uX',
+    consumer_secret='IeZj8sLQiymNl1C3Tr1AagEUlFeAQIC73kiLelvGOP8cz5r8x9',
+    base_url='https://api.twitter.com/1.1/',
+    request_token_url='https://api.twitter.com/oauth/request_token',
+    access_token_url='https://api.twitter.com/oauth/access_token',
+    authorize_url='https://api.twitter.com/oauth/authenticate',
+)
 
-@app.route("/login")
-def login():	
-	return twitter.authorize(callback=url_for('oauth_authorized', next=request.args.get('next') or request.referrer or None))
 
 @twitter.tokengetter
-def get_twitter_token(token=None):
-    return session.get('twitter_token')
+def get_twitter_token():
+    if 'twitter_oauth' in session:
+        resp = session['twitter_oauth']
+        return resp['oauth_token'], resp['oauth_token_secret']
 
-@app.route('/oauth-authorized')
-@twitter.authorized_handler
-def oauth_authorized(resp):
-    next_url = request.args.get('next') or url_for('index')
+
+@app.before_request
+def before_request():
+    g.user = None
+    if 'twitter_oauth' in session:
+        g.user = session['twitter_oauth']
+
+
+@app.route('/')
+def index():
+    tweets = None
+    if g.user is not None:
+        resp = twitter.request('statuses/home_timeline.json')
+        if resp.status == 200:
+            tweets = resp.data
+        else:
+            flash('Unable to load tweets from Twitter.')
+    return render_template('index.html', tweets=tweets)
+
+
+@app.route('/tweet', methods=['POST'])
+def tweet():
+    if g.user is None:
+        return redirect(url_for('login', next=request.url))
+    status = request.form['tweet']
+    if not status:
+        return redirect(url_for('index'))
+    resp = twitter.post('statuses/update.json', data={
+        'status': status
+    })
+    if resp.status == 403:
+        flash('Your tweet was too long.')
+    elif resp.status == 401:
+        flash('Authorization error with Twitter.')
+    else:
+        flash('Successfully tweeted your tweet (ID: #%s)' % resp.data['id'])
+    return redirect(url_for('index'))
+
+
+@app.route('/login')
+def login():
+    callback_url = url_for('oauthorized', next=request.args.get('next'))
+    return twitter.authorize(callback=callback_url or request.referrer or None)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('twitter_oauth', None)
+    return redirect(url_for('index'))
+
+
+@app.route('/oauthorized')
+def oauthorized():
+    resp = twitter.authorized_response()
     if resp is None:
-        flash(u'You denied the request to sign in.')
-        return redirect(next_url)
+        flash('You denied the request to sign in.')
+    else:
+        session['twitter_oauth'] = resp
+    return redirect(url_for('index'))
 
-    session['twitter_token'] = (
-        resp['oauth_token'],
-        resp['oauth_token_secret']
-    )
-    session['twitter_user'] = resp['screen_name']
 
-    flash('You were signed in as %s' % resp['screen_name'])
-    return redirect(next_url)
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True, port=5000)
-
-## EXAMPLE ON USING ON-THE-FLY URLS
-# @app.route('/hello/')
-# @app.route('/hello/<name>')
-# def hello(name=None):
-#     return render_template('hello.html', name=name)
+if __name__ == '__main__':
+    app.run()

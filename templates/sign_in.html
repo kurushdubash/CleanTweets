@@ -9,13 +9,13 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>CleanTweets! Sign-in</title>
+    <title>CleanTweets! </title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="{{ url_for('static', filename='signin.css') }}" rel="stylesheet">
+    <!-- <link href="{{ url_for('static', filename='signin.css') }}" rel="stylesheet"> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   </head>
 
@@ -25,10 +25,24 @@
 
       <header id="top" class="header">
         <div class="text-vertical-center">
+            <center>
             <h1>Clean Tweets</h1>
             <h3>Remove all of your offensive and incriminating tweets!</h3>
+          </center>
             <br>
-            <a href="{{ url_for('login') }}" class="btn btn-dark btn-lg">Find Out More</a>
+
+            <ul class=navigation>
+              <li><a href="{{ url_for('index') }}">overview</a></li>
+              {% if g.user %}
+              <li><a href="{{ url_for('logout') }}">sign out [{{ g.user.screen_name}}]</a></li>
+              {% else %}
+              <li><a href="{{ url_for('login') }}">Sign in!</a></li>
+              {% endif %}
+            </ul>
+            {% for message in get_flashed_messages() %}
+              <p class=message>{{ message }}</p>
+            {% endfor %}
+            {% block body %}{% endblock %}
         </div>
       </header>
 
