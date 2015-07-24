@@ -37,13 +37,13 @@
             <li class="list-group-item">
                 <div class="media">
                   <div class="media-left media-top">
-                    <a href="#">
+                    <a href="http://twitter.com/{{ tweet.user.screen_name }}">
                       <img class="media-object" src="{{ tweet.user.profile_image_url }}" alt="...">
                     </a>
                   </div>
                   <div class="media-body">
                     <h4 class="media-heading">
-                        <a href="http://twitter.com/{{ tweet.user.screen_name }}">
+                        <a href="https://twitter.com/{{ tweet.user.screen_name }}/status/{{ tweet.id }}">
                             {{ tweet.user.screen_name }}
                         </a>
                     </h4>
@@ -51,7 +51,6 @@
                   </div>
                 </div>
             </li>
-
 
 <!-- 
                 <li class="list-group-item"><a href="http://twitter.com/{{ tweet.user.screen_name
