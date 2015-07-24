@@ -31,9 +31,43 @@ def get_user_object(username):
 
 def get_tweets(user):
 	""" user : a Twitter user object
-		Returns a list of tweets for the specified user 
+		Returns a list of the 200 most recent tweets for the specified user 
 	"""
-	return api.GetUserTimeline(screen_name=user.screen_name, count=10)
+	return api.GetUserTimeline(screen_name=user.screen_name, count=200)
+
+def get_all_tweets(user):
+	"""
+	   user : a Twitter user object
+	   Returns a list of all possible tweets grabable for the specified user
+	"""
+	alltweets = []
+	try:
+		# get first 200 to start
+		new_tweets = get_tweets(user)
+
+
+		alltweets.extend(new_tweets)
+		
+		#save the id of the oldest tweet less one
+		oldest = alltweets[-1].id - 1
+
+		#keep grabbing tweets until there are no tweets left to grab
+		while len(new_tweets) > 0:
+			print "Getting tweets with IDs before %s" % (oldest)
+			
+			#all subsiquent requests use the max_id param to prevent duplicates
+			new_tweets = api.GetUserTimeline(screen_name=user.screen_name, count=200, max_id=oldest)
+
+			alltweets.extend(new_tweets)
+			
+			#update the id of the oldest tweet less one
+			oldest = alltweets[-1].id - 1
+			
+			print "*** Downloaded " + str(len(alltweets)) + " tweets so far. " + str((len(alltweets) / 32) ) + "%" 
+	except Exception as e:
+		print e
+	print "Finished download: 100%"
+	return alltweets
 
 def is_tweet_bad(tweet):
 	""" tweet : a Twitter Status object
@@ -80,13 +114,14 @@ def check_tweets(tweets):
 def clean_tweets():
 	""" Looks at the list of twitter IDs in explict_tweet_ids and removes them.
 	"""
+
 	for tweet in explicit_tweets:
 		api.DestroyStatus(tweet.id)
-		print "Deleting Tweet: " + tweet.text
+		print "Deleting Tweet: " + tweet.text + " : from " + tweet.relative_created_at + " : (" + tweet.created_at + ")"
 		explicit_tweets.remove(tweet)
 
 # # For testing purposes
-# user = get_user_object('kurushdubash')
-# tweets= get_tweets(user)
-# check_tweets(tweets)
-# clean_tweets()
+user = get_user_object('kurushdubash')
+tweets = get_all_tweets(user)
+check_tweets(tweets)
+clean_tweets()
