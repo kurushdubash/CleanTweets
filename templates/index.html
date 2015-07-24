@@ -30,11 +30,12 @@
     </center>
     {% if tweets %}
 
-        <h2>Your Dirty Tweets: </h2>
+        <h2>&nbsp; Your Dirty Tweets: </h2>
         <br/> <br/>
         <ul class=navigation>
             {% for tweet in tweets %}
-            <li class="list-group-item">
+            {{ tweet }}
+<!--             <li class="list-group-item">
                 <div class="media">
                   <div class="media-left media-top">
                     <a href="http://twitter.com/{{ tweet.user.screen_name }}">
@@ -50,7 +51,7 @@
                     {{ tweet.text|urlize }}
                   </div>
                 </div>
-            </li>
+            </li> -->
 
 <!-- 
                 <li class="list-group-item"><a href="http://twitter.com/{{ tweet.user.screen_name

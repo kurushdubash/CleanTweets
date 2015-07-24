@@ -142,9 +142,9 @@ def doItAll(username, token_key, token_secret):
 	#tweets = api.GetUserTimeline(screen_name=user.screen_name, count=200)
 	tweets = get_all_tweets(user, api)
 	check_tweets(tweets, explicit_tweets)
-	# tweets_array = get_twitter_embeds(api, explicit_tweets)
-	# print tweets_array
-	return explicit_tweets
+	tweets_array = get_twitter_embeds(api, explicit_tweets)
+	print tweets_array
+	return tweets_array
 
 
 
