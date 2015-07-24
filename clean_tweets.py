@@ -110,7 +110,16 @@ def check_tweets(tweets):
 	for tweet in tweets:
 		if is_tweet_bad(tweet):
 			explicit_tweets.append(tweet)
-			
+
+def get_twitter_embeds():
+	""" Returns a list of all the explicit tweets in a web friendly embed for
+	 	*** Requires check tweets to be before it
+	"""
+	tweets_in_embed_form = []
+	for tweet in explicit_tweets:
+		tweets_in_embed_form.append(api.GetStatusOembed(id=tweet.id))
+	return tweets_in_embed_form
+
 def clean_tweets():
 	""" Looks at the list of twitter IDs in explict_tweet_ids and removes them.
 	"""
@@ -121,7 +130,8 @@ def clean_tweets():
 		explicit_tweets.remove(tweet)
 
 # # For testing purposes
-user = get_user_object('kurushdubash')
-tweets = get_all_tweets(user)
-check_tweets(tweets)
-clean_tweets()
+# user = get_user_object('kurushdubash')
+# tweets = get_all_tweets(user)
+# check_tweets(tweets)
+# get_twitter_embeds()
+# clean_tweets()
