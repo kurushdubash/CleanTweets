@@ -34,7 +34,6 @@ def get_tweets(user):
 		Returns a list of the 200 most recent tweets for the specified user 
 	"""
 	return api.GetUserTimeline(screen_name=user.screen_name, count=200)
-<<<<<<< Updated upstream
 
 def get_all_tweets(user):
 	"""
@@ -69,8 +68,7 @@ def get_all_tweets(user):
 		print e
 	print "Finished download: 100%"
 	return alltweets
-=======
->>>>>>> Stashed changes
+
 
 def is_tweet_bad(tweet):
 	""" tweet : a Twitter Status object
@@ -113,8 +111,17 @@ def check_tweets(tweets):
 	for tweet in tweets:
 		if is_tweet_bad(tweet):
 			explicit_tweets.append(tweet)
-	return explicit_tweets
-			
+
+
+def get_twitter_embeds():
+	""" Returns a list of all the explicit tweets in a web friendly embed for
+	 	*** Requires check tweets to be before it
+	"""
+	tweets_in_embed_form = []
+	for tweet in explicit_tweets:
+		tweets_in_embed_form.append(api.GetStatusOembed(id=tweet.id))
+	return tweets_in_embed_form
+
 def clean_tweets():
 	""" Looks at the list of twitter IDs in explict_tweet_ids and removes them.
 	"""
@@ -134,9 +141,9 @@ def doItAll(username):
 
 # # For testing purposes
 # user = get_user_object('kurushdubash')
-# tweets = get_tweets(user)
-tweets = doItAll('hassaan22')
-for tweet in tweets:
-	print tweet.text
+
+# tweets = get_all_tweets(user)
 # check_tweets(tweets)
+# get_twitter_embeds()
 # clean_tweets()
+
