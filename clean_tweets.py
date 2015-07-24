@@ -117,10 +117,13 @@ def get_twitter_embeds(api, explicit_tweets):
 	""" Returns a list of all the explicit tweets in a web friendly embed for
 	 	*** Requires check tweets to be before it
 	"""
-	tweets_in_embed_form = []
-	for tweet in explicit_tweets:
-		tweets_in_embed_form.append(api.GetStatusOembed(id=tweet.id))
-	return tweets_in_embed_form
+	try:
+		tweets_in_embed_form = []
+		for tweet in explicit_tweets:
+			tweets_in_embed_form.append(api.GetStatusOembed(id=tweet.id))
+		return tweets_in_embed_form
+	except Exception as e:
+		return None
 
 def clean_tweets():
 	""" Looks at the list of twitter IDs in explict_tweet_ids and removes them.
@@ -142,9 +145,10 @@ def doItAll(username, token_key, token_secret):
 	#tweets = api.GetUserTimeline(screen_name=user.screen_name, count=200)
 	tweets = get_all_tweets(user, api)
 	check_tweets(tweets, explicit_tweets)
-	tweets_array = get_twitter_embeds(api, explicit_tweets)
-	print tweets_array
-	return tweets_array
+	tweets_array_embed = get_twitter_embeds(api, explicit_tweets)
+	print tweets_array_embed
+	print explicit_tweets
+	return (tweets_array_embed, explicit_tweets)
 
 
 

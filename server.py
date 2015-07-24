@@ -38,14 +38,15 @@ def before_request():
 
 @app.route('/')
 def index():
-    tweets = None
+    tweets_embed = None
+    tweets_info = None
     if g.user is not None:
         outh_token, outh_secret = get_twitter_token()
         username = g.user["screen_name"]
-        tweets = clean_tweets.doItAll(username, outh_token, outh_secret)
+        tweets_embed, tweets_info = clean_tweets.doItAll(username, outh_token, outh_secret)
     else:
         flash('Unable to load tweets from Twitter.')
-    return render_template('index.html', tweets=tweets)
+    return render_template('index.html', tweets_embed=tweets_embed, tweets_info=tweets_info)
 
 
 @app.route('/tweet', methods=['POST'])
@@ -92,7 +93,7 @@ def oauthorized():
 
 @app.route('/cleanMyDirtyTweets')
 def cleanMyDirtyTweets():
-    return
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':

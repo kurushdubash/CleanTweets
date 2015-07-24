@@ -3,7 +3,7 @@
 {% if g.user %}
     <center>
         <br/> 
-        <p><a class="btn btn-warning btn-xlg" href="#" role="button">
+        <p><a class="btn btn-warning btn-xlg" href=" {{ url_for('cleanMyDirtyTweets') }}" role="button">
             <i class="fa fa-trash-o fa-2x"></i>
             &nbsp;&nbsp;&nbsp;
             Remove my Dirty Tweets!</a></p>
@@ -28,36 +28,44 @@
         </p>
         </form> -->
     </center>
-    {% if tweets %}
+    {% if tweets_info != None %}
 
-        <h2>&nbsp; Your Dirty Tweets: </h2>
+        <h2> <center> Your Dirty Tweets </center> </h2>
         <br/> <br/>
-        <ul class=navigation>
-            {% for tweet in tweets %}
-            {{ tweet }}
-<!--             <li class="list-group-item">
-                <div class="media">
-                  <div class="media-left media-top">
-                    <a href="http://twitter.com/{{ tweet.user.screen_name }}">
-                      <img class="media-object" src="{{ tweet.user.profile_image_url }}" alt="...">
-                    </a>
-                  </div>
-                  <div class="media-body">
-                    <h4 class="media-heading">
-                        <a href="https://twitter.com/{{ tweet.user.screen_name }}/status/{{ tweet.id }}">
-                            {{ tweet.user.screen_name }}
-                        </a>
-                    </h4>
-                    {{ tweet.text|urlize }}
-                  </div>
-                </div>
-            </li> -->
+        
+            {% if tweets_embed != None %}
+                {% for tweet in tweets_embed %}
+                <center>
+                    {{ tweet.html|safe }}
+                </center>
 
-<!-- 
-                <li class="list-group-item"><a href="http://twitter.com/{{ tweet.user.screen_name
-                }}">{{ tweet.user.screen_name }}</a>: {{ tweet.text|urlize }}</li> -->
-            {% endfor %}
-        </ul>
+                {% endfor %}
+
+            {% else %}
+            <ul class=navigation>
+                {% for tweet in tweets_info %}
+
+                    <li class="list-group-item">
+                        <div class="media">
+                          <div class="media-left media-top">
+                            <a href="http://twitter.com/{{ tweet.user.screen_name }}">
+                              <img class="media-object" src="{{ tweet.user.profile_image_url }}" alt="...">
+                            </a>
+                          </div>
+                          <div class="media-body">
+                            <h4 class="media-heading">
+                                <a href="https://twitter.com/{{ tweet.user.screen_name }}/status/{{ tweet.id }}">
+                                    {{ tweet.user.screen_name }}
+                                </a>
+                            </h4>
+                            {{ tweet.text|urlize }}
+                          </div>
+                        </div>
+                    </li>
+
+                {% endfor %}
+            </ul>
+        {% endif %}
     {% endif %}
 {% else %}
     <br/><br/><br/>
