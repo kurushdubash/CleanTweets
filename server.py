@@ -2,6 +2,7 @@ from flask import Flask
 from flask import g, session, request, url_for, flash
 from flask import redirect, render_template
 from flask_oauthlib.client import OAuth
+import clean_tweets
 
 
 app = Flask(__name__)
@@ -39,13 +40,11 @@ def before_request():
 def index():
     tweets = None
     if g.user is not None:
-        resp = twitter.request('statuses/home_timeline.json')
-        if resp.status == 200:
-            tweets = resp.data
-            for tweet in tweets:
-                print tweet['user']['profile_image_url_https']
-        else:
-            flash('Unable to load tweets from Twitter. Error code: %d' %(resp.status))
+        outh_token, outh_secret = get_twitter_token()
+        username = g.user["screen_name"]
+        tweets = clean_tweets.doItAll(username, outh_token, outh_secret)
+    else:
+        flash('Unable to load tweets from Twitter.')
     return render_template('index.html', tweets=tweets)
 
 

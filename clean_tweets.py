@@ -3,10 +3,10 @@ from string import ascii_letters
 from bad_words import bad_words # Gets a list of all the bad words
 
 # auth stuff for testing purposes
-api = twitter.Api(consumer_key='5ZcYijaOIKQRVhfOqCsleC1uX',
-	  consumer_secret='IeZj8sLQiymNl1C3Tr1AagEUlFeAQIC73kiLelvGOP8cz5r8x9',
-	  access_token_key='29823087-wyFqsOIbfVwomSM7O5jca4e4i00Kqcisw7NeDvKIc',
-	  access_token_secret='KASM0GiD4wZXzxJqO4hH2nHXwX5BpDOywstZvvYKDPt7g')
+# api = twitter.Api(consumer_key='5ZcYijaOIKQRVhfOqCsleC1uX',
+# 	  consumer_secret='IeZj8sLQiymNl1C3Tr1AagEUlFeAQIC73kiLelvGOP8cz5r8x9',
+# 	  access_token_key='29823087-wyFqsOIbfVwomSM7O5jca4e4i00Kqcisw7NeDvKIc',
+# 	  access_token_secret='KASM0GiD4wZXzxJqO4hH2nHXwX5BpDOywstZvvYKDPt7g')
 
 # # for production
 # api = twitter.Api(consumer_key=consumer_key, 
@@ -14,7 +14,7 @@ api = twitter.Api(consumer_key='5ZcYijaOIKQRVhfOqCsleC1uX',
 # 					  access_token_key=access_token_key, 
 # 					  access_token_secret=access_token_secret)
 
-explicit_tweets = [] # a list of twitter status objects that we coined as 'bad'
+# explicit_tweets = [] # a list of twitter status objects that we coined as 'bad'
 
 def get_auth_info(consumer_key, consumer_secret, access_token_key, access_token_secret):
 	""" Takes in consumer_key, consumer_secret, access_token_key, access_token_secret
@@ -104,7 +104,7 @@ def strip_non_ascii(list_of_words):
 		count+=1
 	return words
 
-def check_tweets(tweets):
+def check_tweets(tweets, explicit_tweets):
 	""" tweets : a list of Twitter Status objects
 		goes through a list of twitter objects and checks to see if they are bad or not
 	""" 
@@ -113,7 +113,7 @@ def check_tweets(tweets):
 			explicit_tweets.append(tweet)
 
 
-def get_twitter_embeds():
+def get_twitter_embeds(api, explicit_tweets):
 	""" Returns a list of all the explicit tweets in a web friendly embed for
 	 	*** Requires check tweets to be before it
 	"""
@@ -131,11 +131,19 @@ def clean_tweets():
 		print "Deleting Tweet: " + tweet.text + " : from " + tweet.relative_created_at + " : (" + tweet.created_at + ")"
 		explicit_tweets.remove(tweet)
 
-def doItAll(username):
+def doItAll(username, token_key, token_secret):
+	api = twitter.Api(consumer_key='5ZcYijaOIKQRVhfOqCsleC1uX',
+	  consumer_secret='IeZj8sLQiymNl1C3Tr1AagEUlFeAQIC73kiLelvGOP8cz5r8x9',
+	  access_token_key=str(token_key),
+	  access_token_secret=str(token_secret))
+	explicit_tweets = [] # a list of twitter status objects that we coined as 'bad'
+
 	user = api.GetUser(screen_name=username)
 	tweets = api.GetUserTimeline(screen_name=user.screen_name, count=200)
-	list_of_bad_tweets = check_tweets(tweets)
-	return list_of_bad_tweets
+	check_tweets(tweets, explicit_tweets)
+	# tweets_array = get_twitter_embeds(api, explicit_tweets)
+	# print tweets_array
+	return explicit_tweets
 
 
 

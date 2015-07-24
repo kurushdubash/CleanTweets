@@ -4,14 +4,15 @@
     <center>
         <br/> 
         <p><a class="btn btn-warning btn-xlg" href="#" role="button">
-            <i class="fa fa-search-plus fa-2x"></i>
+            <i class="fa fa-trash-o fa-2x"></i>
             &nbsp;&nbsp;&nbsp;
-            Find my Dirty Tweets!</a></p>
+            Remove my Dirty Tweets!</a></p>
         <br/>
 
         <br/>
         <br/>
 
+<!--    TWEET FORM 
         <h3>
             Hello {{ g.user.screen_name }}!  Wanna tweet something?
         </h3>
@@ -25,35 +26,32 @@
             <input type=text name=tweet size=50>
             <input type=submit value="Tweet!">
         </p>
-        </form>
+        </form> -->
     </center>
     {% if tweets %}
 
-        <h2>Your Timeline</h2>
+        <h2>Your Dirty Tweets: </h2>
+        <br/> <br/>
+        <ul class=navigation>
             {% for tweet in tweets %}
-            <div class="col">            
-
-              <div class="col-lg-6">
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <input type="checkbox" aria-label="...">
-                    </span> 
-                    <div class="media">
-                      <div class="media-left media-top">
-                          <img class="media-object" src="{{ tweet.user.profile_image_url_https }}" alt="...">
-                      </div>
-                      <div class="media-body">
-                        <h4 class="media-heading">
-                            <a href="http://twitter.com/{{ tweet.user.screen_name }}">
-                                {{ tweet.user.screen_name }}
-                            </a>
-                        </h4>
-                        {{ tweet.text|urlize }}
-                      </div>
-                    </div>
+            <li class="list-group-item">
+                <div class="media">
+                  <div class="media-left media-top">
+                    <a href="#">
+                      <img class="media-object" src="{{ tweet.user.profile_image_url }}" alt="...">
+                    </a>
+                  </div>
+                  <div class="media-body">
+                    <h4 class="media-heading">
+                        <a href="http://twitter.com/{{ tweet.user.screen_name }}">
+                            {{ tweet.user.screen_name }}
+                        </a>
+                    </h4>
+                    {{ tweet.text|urlize }}
+                  </div>
                 </div>
+            </li>
 
-            </div>
 
 <!-- 
                 <li class="list-group-item"><a href="http://twitter.com/{{ tweet.user.screen_name
