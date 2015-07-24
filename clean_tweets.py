@@ -29,13 +29,13 @@ def get_user_object(username):
 	"""
 	return api.GetUser(screen_name=username)
 
-def get_tweets(user):
+def get_tweets(user, api):
 	""" user : a Twitter user object
 		Returns a list of the 200 most recent tweets for the specified user 
 	"""
 	return api.GetUserTimeline(screen_name=user.screen_name, count=200)
 
-def get_all_tweets(user):
+def get_all_tweets(user, api):
 	"""
 	   user : a Twitter user object
 	   Returns a list of all possible tweets grabable for the specified user
@@ -43,7 +43,7 @@ def get_all_tweets(user):
 	alltweets = []
 	try:
 		# get first 200 to start
-		new_tweets = get_tweets(user)
+		new_tweets = get_tweets(user, api)
 
 
 		alltweets.extend(new_tweets)
@@ -139,7 +139,8 @@ def doItAll(username, token_key, token_secret):
 	explicit_tweets = [] # a list of twitter status objects that we coined as 'bad'
 
 	user = api.GetUser(screen_name=username)
-	tweets = api.GetUserTimeline(screen_name=user.screen_name, count=200)
+	#tweets = api.GetUserTimeline(screen_name=user.screen_name, count=200)
+	tweets = get_all_tweets(user, api)
 	check_tweets(tweets, explicit_tweets)
 	# tweets_array = get_twitter_embeds(api, explicit_tweets)
 	# print tweets_array
