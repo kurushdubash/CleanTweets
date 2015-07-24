@@ -30,10 +30,34 @@
     {% if tweets %}
 
         <h2>Your Timeline</h2>
-        <ul>
             {% for tweet in tweets %}
+            <div class="col">            
+
+              <div class="col-lg-6">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <input type="checkbox" aria-label="...">
+                    </span> 
+                    <div class="media">
+                      <div class="media-left media-top">
+                          <img class="media-object" src="{{ tweet.user.profile_image_url_https }}" alt="...">
+                      </div>
+                      <div class="media-body">
+                        <h4 class="media-heading">
+                            <a href="http://twitter.com/{{ tweet.user.screen_name }}">
+                                {{ tweet.user.screen_name }}
+                            </a>
+                        </h4>
+                        {{ tweet.text|urlize }}
+                      </div>
+                    </div>
+                </div>
+
+            </div>
+
+<!-- 
                 <li class="list-group-item"><a href="http://twitter.com/{{ tweet.user.screen_name
-                }}">{{ tweet.user.screen_name }}</a>: {{ tweet.text|urlize }}</li>
+                }}">{{ tweet.user.screen_name }}</a>: {{ tweet.text|urlize }}</li> -->
             {% endfor %}
         </ul>
     {% endif %}

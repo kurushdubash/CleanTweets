@@ -42,6 +42,8 @@ def index():
         resp = twitter.request('statuses/home_timeline.json')
         if resp.status == 200:
             tweets = resp.data
+            for tweet in tweets:
+                print tweet['user']['profile_image_url_https']
         else:
             flash('Unable to load tweets from Twitter. Error code: %d' %(resp.status))
     return render_template('index.html', tweets=tweets)
@@ -85,7 +87,13 @@ def oauthorized():
         flash('You denied the request to sign in.')
     else:
         session['twitter_oauth'] = resp
+    print resp
     return redirect(url_for('index'))
+
+
+@app.route('/cleanMyDirtyTweets')
+def cleanMyDirtyTweets():
+    return
 
 
 if __name__ == '__main__':

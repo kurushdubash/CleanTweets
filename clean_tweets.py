@@ -3,13 +3,13 @@ from string import ascii_letters
 from bad_words import bad_words # Gets a list of all the bad words
 
 # auth stuff for testing purposes
-api = twitter.Api(consumer_key='VzoDn3WeXht6OkS2HvNueflzL',
-	  consumer_secret='wAmFnCv4w3o5dV4gBSzCTTJbMaDaUWoMKBrRPesljECUPJMzKW',
-	  access_token_key='46310347-WAJLn4UDyfxlupMy7Q1nNoyQ4F4OpjZdjaVCPtCGJ',
-	  access_token_secret='FObEKM6jMrYX884j8TlzoywREW5fI1A7ZfSQFa8xY41AB')
+api = twitter.Api(consumer_key='5ZcYijaOIKQRVhfOqCsleC1uX',
+	  consumer_secret='IeZj8sLQiymNl1C3Tr1AagEUlFeAQIC73kiLelvGOP8cz5r8x9',
+	  access_token_key='29823087-wyFqsOIbfVwomSM7O5jca4e4i00Kqcisw7NeDvKIc',
+	  access_token_secret='KASM0GiD4wZXzxJqO4hH2nHXwX5BpDOywstZvvYKDPt7g')
 
 # # for production
-# api = twitter.Apit(consumer_key=consumer_key, 
+# api = twitter.Api(consumer_key=consumer_key, 
 # 					  consumer_secret=consumer_secret, 
 # 					  access_token_key=access_token_key, 
 # 					  access_token_secret=access_token_secret)
@@ -34,6 +34,7 @@ def get_tweets(user):
 		Returns a list of the 200 most recent tweets for the specified user 
 	"""
 	return api.GetUserTimeline(screen_name=user.screen_name, count=200)
+<<<<<<< Updated upstream
 
 def get_all_tweets(user):
 	"""
@@ -68,6 +69,8 @@ def get_all_tweets(user):
 		print e
 	print "Finished download: 100%"
 	return alltweets
+=======
+>>>>>>> Stashed changes
 
 def is_tweet_bad(tweet):
 	""" tweet : a Twitter Status object
@@ -110,6 +113,7 @@ def check_tweets(tweets):
 	for tweet in tweets:
 		if is_tweet_bad(tweet):
 			explicit_tweets.append(tweet)
+	return explicit_tweets
 			
 def clean_tweets():
 	""" Looks at the list of twitter IDs in explict_tweet_ids and removes them.
@@ -120,8 +124,19 @@ def clean_tweets():
 		print "Deleting Tweet: " + tweet.text + " : from " + tweet.relative_created_at + " : (" + tweet.created_at + ")"
 		explicit_tweets.remove(tweet)
 
+def doItAll(username):
+	user = api.GetUser(screen_name=username)
+	tweets = api.GetUserTimeline(screen_name=user.screen_name, count=200)
+	list_of_bad_tweets = check_tweets(tweets)
+	return list_of_bad_tweets
+
+
+
 # # For testing purposes
-user = get_user_object('kurushdubash')
-tweets = get_all_tweets(user)
-check_tweets(tweets)
-clean_tweets()
+# user = get_user_object('kurushdubash')
+# tweets = get_tweets(user)
+tweets = doItAll('hassaan22')
+for tweet in tweets:
+	print tweet.text
+# check_tweets(tweets)
+# clean_tweets()
