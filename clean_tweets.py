@@ -29,6 +29,13 @@ class TwitterUser():
 	  				access_token_key=str(token_key),
 	  				access_token_secret=str(token_secret))
 		self.username = username
+		
+		user_profile = self.api.GetUser(screen_name=username)
+
+		self.user_public = True
+		if user_profile.protected:
+			self.user_public = False
+
 
 
 	def get_all_tweets(self):
@@ -125,8 +132,8 @@ class TwitterUser():
 	def clean_tweets(self):
 		""" Looks at the list of twitter IDs in explict_tweet_ids and removes them.
 		"""
-
 		for tweet in self.explicit_tweets:
+			print "LOLOLOLLLLLLLLLL"
 			self.api.DestroyStatus(tweet.id)
 			print "Deleting Tweet: " + tweet.text + " : from " + tweet.relative_created_at + " : (" + tweet.created_at + ")"
 			self.explicit_tweets.remove(tweet)

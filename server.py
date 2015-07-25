@@ -41,6 +41,7 @@ def before_request():
 def index():
     tweets_embed = None
     bad_tweets = None
+    user_public = None
     if g.user is not None:
         outh_token, outh_secret = get_twitter_token()
         username = g.user["screen_name"]
@@ -50,29 +51,10 @@ def index():
 
         bad_tweets = User.get_bad_tweets()
         tweets_embed = User.get_twitter_embeds(bad_tweets)
+        user_public = User.user_public
     else:
         flash('Unable to load tweets from Twitter.')
-
-    return render_template('index.html', tweets_embed=tweets_embed, tweets_info=bad_tweets)
-
-
-@app.route('/tweet', methods=['POST'])
-def tweet():
-    if g.user is None:
-        return redirect(url_for('login', next=request.url))
-    status = request.form['tweet']
-    if not status:
-        return redirect(url_for('index'))
-    resp = twitter.post('statuses/update.json', data={
-        'status': status
-    })
-    if resp.status == 403:
-        flash('Your tweet was too long.')
-    elif resp.status == 401:
-        flash('Authorization error with Twitter.')
-    else:
-        flash('Successfully tweeted your tweet (ID: #%s)' % resp.data['id'])
-    return redirect(url_for('index'))
+    return render_template('index.html', tweets_embed=tweets_embed, dirty_tweets=bad_tweets, user_public=user_public)
 
 
 @app.route('/login')

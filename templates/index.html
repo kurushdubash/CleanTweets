@@ -1,39 +1,26 @@
 {% extends "sign_in.html" %}
 {% block body %}
+
 {% if g.user %}
-    <center>
-        <br/> 
-        <p><a class="btn btn-warning btn-xlg" href=" {{ url_for('cleanMyDirtyTweets') }}" role="button">
-            <i class="fa fa-trash-o fa-2x"></i>
-            &nbsp;&nbsp;&nbsp;
-            Remove my Dirty Tweets!</a></p>
-        <br/>
 
-        <br/>
-        <br/>
+    {% if dirty_tweets %}
+        <center>
+            <br/> 
+            <p><a class="btn btn-warning btn-xlg" href=" {{ url_for('cleanMyDirtyTweets') }}" role="button">
+                <i class="fa fa-trash-o fa-2x"></i>
+                &nbsp;&nbsp;&nbsp;
+                Remove my Dirty Tweets!</a></p>
+            <br/>
 
-<!--    TWEET FORM 
-        <h3>
-            Hello {{ g.user.screen_name }}!  Wanna tweet something?
-        </h3>
-        <br/>
-        <br/>
-        <br/>
+            <br/>
+            <br/>
 
-   
-        <form action="{{ url_for('tweet') }}"  method=post>
-          <p>
-            <input type=text name=tweet size=50>
-            <input type=submit value="Tweet!">
-        </p>
-        </form> -->
-    </center>
-    {% if tweets_info != None %}
+        </center>
 
         <h2> <center> Your Dirty Tweets </center> </h2>
         <br/> <br/>
         
-            {% if tweets_embed != None %}
+            {% if user_public %}
                 {% for tweet in tweets_embed %}
                 <center>
                     {{ tweet.html|safe }}
@@ -43,7 +30,7 @@
 
             {% else %}
             <ul class=navigation>
-                {% for tweet in tweets_info %}
+                {% for tweet in dirty_tweets %}
 
                     <li class="list-group-item">
                         <div class="media">
@@ -66,15 +53,36 @@
                 {% endfor %}
             </ul>
         {% endif %}
+    {% else %}
+        <center>
+            <br/> 
+            <p><a class="btn btn-success btn-xlg" href="#" role="button">
+                <i class="fa fa-shield fa-2x"></i>
+                &nbsp;&nbsp;&nbsp;
+                Your Twitter is Clean!</a></p>
+            <br/>
+
+            <br/>
+            <br/>
+        </center>
+
     {% endif %}
 {% else %}
-<!-- <img src="{{ url_for('static', filename='bg.JPG') }}" alt="Image baby" class="img-responsive"> -->
     <br/><br/><br/>
     <center>
         <h2>
-          Sign in to view your public timeline and to tweet from this application.
-        </h2>
+          Sign in to view your Dirty Tweets, and remove them all with a click of a button!
+      </h2>
     </center>
+
+<!--         <p>
+          CleanTweets helps keep you and your twitter looking professional! With CleanTweets, you can view all the inappropriate and provacative tweets you have tweeted/re-tweeted, and can make them disappear with a simple click of a button! 
+          <br/>
+          CleanTweets will carefully remove all your Dirty Tweets from your twitter, leaving you worry-free!
+          <br/><br/>
+          Please Share with your friends and family!
+        </p> -->
+
 
 {% endif %}
 
