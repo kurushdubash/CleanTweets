@@ -19,7 +19,6 @@ from bad_words import bad_words # Gets a list of all the bad words
 class TwitterUser():
 	explicit_tweets = []
 	alltweets = []
-	explicit_tweets_embed_form = []
 
 	def __init__(self, token_key, token_secret, username):
 		self.token_key = token_key
@@ -133,11 +132,10 @@ class TwitterUser():
 		""" Looks at the list of twitter IDs in explict_tweet_ids and removes them.
 		"""
 		for tweet in self.explicit_tweets:
-			print "LOLOLOLLLLLLLLLL"
 			self.api.DestroyStatus(tweet.id)
 			print "Deleting Tweet: " + tweet.text + " : from " + tweet.relative_created_at + " : (" + tweet.created_at + ")"
-			self.explicit_tweets.remove(tweet)
-			self.explicit_tweets_embed_form = []
+			
+		self.explicit_tweets = []
 
 	def get_bad_tweets(self):
 		""" Returns a list of all the bad tweets
