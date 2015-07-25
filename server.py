@@ -21,6 +21,7 @@ twitter = oauth.remote_app(
     authorize_url='https://api.twitter.com/oauth/authenticate',
 )
 
+User = None
 
 @twitter.tokengetter
 def get_twitter_token():
@@ -39,14 +40,20 @@ def before_request():
 @app.route('/')
 def index():
     tweets_embed = None
-    tweets_info = None
+    bad_tweets = None
     if g.user is not None:
         outh_token, outh_secret = get_twitter_token()
         username = g.user["screen_name"]
-        tweets_embed, tweets_info = clean_tweets.doItAll(username, outh_token, outh_secret)
+
+        global User
+        User = clean_tweets.TwitterUser(outh_token, outh_secret, username)
+
+        bad_tweets = User.get_bad_tweets()
+        tweets_embed = User.get_twitter_embeds(bad_tweets)
     else:
         flash('Unable to load tweets from Twitter.')
-    return render_template('index.html', tweets_embed=tweets_embed, tweets_info=tweets_info)
+
+    return render_template('index.html', tweets_embed=tweets_embed, tweets_info=bad_tweets)
 
 
 @app.route('/tweet', methods=['POST'])
@@ -93,6 +100,7 @@ def oauthorized():
 
 @app.route('/cleanMyDirtyTweets')
 def cleanMyDirtyTweets():
+    User.clean_tweets()
     return redirect(url_for('index'))
 
 
