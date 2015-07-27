@@ -90,6 +90,7 @@ def cleanMyDirtyTweets():
     User.clean_tweets()
     global freshly_cleaned
     freshly_cleaned = True
+    User.post_tweet('CleanTweets helped me remove {0} of my Dirty Tweets! Visit www.CleanTweets.me to remove all your inappropriate and explicit Tweets!'.format(User.explicit_tweets_count))
     return redirect(url_for('index'))
 
 

@@ -32,6 +32,8 @@ class TwitterUser():
 	  				access_token_secret=str(token_secret))
 		self.username = username
 		
+		explicit_tweets_count = 0
+
 		user_profile = self.api.GetUser(screen_name=username)
 
 		self.user_public = True
@@ -42,7 +44,6 @@ class TwitterUser():
 
 	def get_all_tweets(self):
 		"""
-		   user : a Twitter user object
 		   Returns a list of all possible tweets grabable for the specified user
 		"""
 		alltweets = []
@@ -149,6 +150,7 @@ class TwitterUser():
 		self.explicit_tweets = self.check_tweets(self.alltweets)
 		self.explicit_tweets_non_objects = self.prepare_tweets_for_databse(self.explicit_tweets)
 	
+		self.explicit_tweets_count = len(self.explicit_tweets)
 		return self.explicit_tweets
 
 	def prepare_tweets_for_databse(self, twitter_objects):
@@ -163,6 +165,11 @@ class TwitterUser():
 	def post_tweets(self, text):
 		self.api.PostUpdate(text)
 		print "Posting tweet update: " + text
+
+	def post_tweet(self, tweet_text):
+		""" Posts tweet from user's account.
+		"""
+		self.api.PostUpdate(tweet_text)
 
 # # For testing purposes
 # user = get_user_object('kurushdubash')
