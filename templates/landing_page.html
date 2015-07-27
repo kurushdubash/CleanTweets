@@ -1,3 +1,15 @@
+{% if g.user %}
+<!-- The Green Success Banner at the top of the page! -->
+    <center>
+        <div class="alert alert-success alert-dismissible fade in" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>Success!</strong> You have Successfully logged onto CleanTweets using your Twitter Account!
+        </div>
+    </center>
+
+{% endif %}
+
+
 {% extends "sign_in.html" %}
 {% block body %}
 
@@ -5,7 +17,7 @@
 
     <center>
         <br/> 
-        <p><a class="btn btn-danger btn-xlg" href="{{ url_for('findMyDirtyTweets') }}" role="button">
+        <p><a class="btn btn-warning btn-xlg" href="{{ url_for('findMyDirtyTweets') }}" role="button">
             <i class="fa fa-search fa-2x"></i>
             &nbsp;&nbsp;&nbsp;
             Find my Dirty Tweets!</a></p>

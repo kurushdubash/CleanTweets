@@ -64,7 +64,7 @@ def findMyDirtyTweets():
         global freshly_cleaned
         freshly_cleaned = False
     return render_template('index.html', tweets_embed=tweets_embed, dirty_tweets=bad_tweets, user_public=user_public)
-    
+
 @app.route('/login')
 def login():
     callback_url = url_for('oauthorized', next=request.args.get('next'))
@@ -94,8 +94,7 @@ def cleanMyDirtyTweets():
     global freshly_cleaned
     freshly_cleaned = True
     User.post_tweet('CleanTweets helped me remove {0} of my Dirty Tweets! Visit www.CleanTweets.me to remove all your inappropriate and explicit Tweets!'.format(User.explicit_tweets_count))
-    return redirect(url_for('index'))
-
+    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=5000)

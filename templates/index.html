@@ -1,79 +1,72 @@
 {% extends "sign_in.html" %}
 {% block body %}
 
-{% if g.user %}
 
-    {% if dirty_tweets %}
-        <center>
-            <br/> 
-            <p><a class="btn btn-warning btn-xlg" href=" {{ url_for('cleanMyDirtyTweets') }}" role="button">
-                <i class="fa fa-trash-o fa-2x"></i>
-                &nbsp;&nbsp;&nbsp;
-                Remove my Dirty Tweets!</a></p>
-            <br/>
+{% if dirty_tweets %}
+    <center>
+        <br/> 
+        <p><a class="btn btn-danger btn-xlg" href=" {{ url_for('cleanMyDirtyTweets') }}" role="button">
+            <i class="fa fa-trash-o fa-2x"></i>
+            &nbsp;&nbsp;&nbsp;
+            Remove my Dirty Tweets!</a></p>
+        <br/>
 
-            <br/>
-            <br/>
+        <br/>
+        <br/>
 
-        </center>
+    </center>
 
-        <h2> <center> Your Dirty Tweets </center> </h2>
-        <br/> <br/>
-        
-            {% if user_public %}
-                {% for tweet in tweets_embed %}
-                <center>
-                    {{ tweet.html|safe }}
-                </center>
+    <h2> <center> Your Dirty Tweets </center> </h2>
+    <br/> <br/>
+    
+        {% if user_public %}
+            {% for tweet in tweets_embed %}
+            <center>
+                {{ tweet.html|safe }}
+            </center>
 
-                {% endfor %}
+            {% endfor %}
 
-            {% else %}
-            <ul class=navigation>
-                {% for tweet in dirty_tweets %}
+        {% else %}
+        <ul class=navigation>
+            {% for tweet in dirty_tweets %}
 
-                    <li class="list-group-item">
-                        <div class="media">
-                          <div class="media-left media-top">
-                            <a href="http://twitter.com/{{ tweet.user.screen_name }}">
-                              <img class="media-object" src="{{ tweet.user.profile_image_url }}" alt="...">
+                <li class="list-group-item">
+                    <div class="media">
+                      <div class="media-left media-top">
+                        <a href="http://twitter.com/{{ tweet.user.screen_name }}">
+                          <img class="media-object" src="{{ tweet.user.profile_image_url }}" alt="...">
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <h4 class="media-heading">
+                            <a href="https://twitter.com/{{ tweet.user.screen_name }}/status/{{ tweet.id }}">
+                                {{ tweet.user.screen_name }}
                             </a>
-                          </div>
-                          <div class="media-body">
-                            <h4 class="media-heading">
-                                <a href="https://twitter.com/{{ tweet.user.screen_name }}/status/{{ tweet.id }}">
-                                    {{ tweet.user.screen_name }}
-                                </a>
-                            </h4>
-                            {{ tweet.text|urlize }}
-                          </div>
-                        </div>
-                    </li>
+                        </h4>
+                        {{ tweet.text|urlize }}
+                      </div>
+                    </div>
+                </li>
 
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% else %}
-        <center>
-            <br/> 
-            <p><a class="btn btn-success btn-xlg" href="#" role="button">
-                <i class="fa fa-shield fa-2x"></i>
-                &nbsp;&nbsp;&nbsp;
-                Your Twitter is Clean!</a></p>
-            <br/>
-
-            <br/>
-            <br/>
-        </center>
-
+            {% endfor %}
+        </ul>
     {% endif %}
 {% else %}
-    <br/><br/><br/>
+
     <center>
-        <h2>
-          Sign in to view your Dirty Tweets, and remove them all with a click of a button!
-      </h2>
+        <br/> 
+        <p><a class="btn btn-success btn-xlg" href="#" role="button">
+            <i class="fa fa-shield fa-2x"></i>
+            &nbsp;&nbsp;&nbsp;
+            Your Twitter is Clean!</a></p>
+        <br/>
+
+        <br/>
+        <br/>
     </center>
+
+{% endif %}
 
 <!--         <p>
           CleanTweets helps keep you and your twitter looking professional! With CleanTweets, you can view all the inappropriate and provacative tweets you have tweeted/re-tweeted, and can make them disappear with a simple click of a button! 
@@ -84,6 +77,5 @@
         </p> -->
 
 
-{% endif %}
 
 {% endblock %}
