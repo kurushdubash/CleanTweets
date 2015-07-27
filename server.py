@@ -40,6 +40,10 @@ def before_request():
 
 @app.route('/')
 def index():
+    return render_template('landing_page.html')
+
+@app.route('/findMyDirtyTweets')
+def findMyDirtyTweets():
     tweets_embed = None
     bad_tweets = None
     user_public = None
@@ -60,8 +64,7 @@ def index():
         global freshly_cleaned
         freshly_cleaned = False
     return render_template('index.html', tweets_embed=tweets_embed, dirty_tweets=bad_tweets, user_public=user_public)
-
-
+    
 @app.route('/login')
 def login():
     callback_url = url_for('oauthorized', next=request.args.get('next'))

@@ -1,0 +1,29 @@
+{% extends "sign_in.html" %}
+{% block body %}
+
+{% if g.user %}
+
+    <center>
+        <br/> 
+        <p><a class="btn btn-danger btn-xlg" href="{{ url_for('findMyDirtyTweets') }}" role="button">
+            <i class="fa fa-search fa-2x"></i>
+            &nbsp;&nbsp;&nbsp;
+            Find my Dirty Tweets!</a></p>
+        <br/>
+
+        <br/>
+        <br/>
+    </center>
+
+{% else %}
+    <br/><br/><br/>
+    <center>
+        <h2>
+          Sign in to view your Dirty Tweets, and remove them all with a click of a button!
+      </h2>
+    </center>
+
+
+{% endif %}
+
+{% endblock %}
