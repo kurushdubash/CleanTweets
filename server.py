@@ -22,6 +22,7 @@ twitter = oauth.remote_app(
 )
 
 User = None
+freshly_cleaned = False
 
 @twitter.tokengetter
 def get_twitter_token():
@@ -42,7 +43,8 @@ def index():
     tweets_embed = None
     bad_tweets = None
     user_public = None
-    if g.user is not None:
+    global freshly_cleaned
+    if g.user is not None and not freshly_cleaned:
         outh_token, outh_secret = get_twitter_token()
         username = g.user["screen_name"]
 
@@ -51,9 +53,12 @@ def index():
 
         bad_tweets = User.get_bad_tweets()
         tweets_embed = User.get_twitter_embeds(bad_tweets)
+        User.update_database()
         user_public = User.user_public
     else:
-        flash('Unable to load tweets from Twitter.')
+        flash('Unable to load tweets from Twitter. You may have just cleaned your twitter')
+        global freshly_cleaned
+        freshly_cleaned = False
     return render_template('index.html', tweets_embed=tweets_embed, dirty_tweets=bad_tweets, user_public=user_public)
 
 
@@ -83,6 +88,8 @@ def oauthorized():
 @app.route('/cleanMyDirtyTweets')
 def cleanMyDirtyTweets():
     User.clean_tweets()
+    global freshly_cleaned
+    freshly_cleaned = True
     return redirect(url_for('index'))
 
 

@@ -1,4 +1,5 @@
 import twitter
+import database
 from string import ascii_letters
 from bad_words import bad_words # Gets a list of all the bad words
 
@@ -19,6 +20,8 @@ from bad_words import bad_words # Gets a list of all the bad words
 class TwitterUser():
 	explicit_tweets = []
 	alltweets = []
+	tweets_deleted = 0
+	explicit_tweets_non_objects = {}
 
 	def __init__(self, token_key, token_secret, username):
 		self.token_key = token_key
@@ -82,8 +85,9 @@ class TwitterUser():
 		ascii_tweet = self.strip_non_ascii(tweet_words)
 		ascii_tweet = filter(None, ascii_tweet)
 		for word in ascii_tweet:
-			if word in bad_words:
-				return True
+			for item in bad_words:
+				if word == item:
+					return True
 		return False
 
 	def strip_non_ascii(self, list_of_words):
@@ -136,13 +140,29 @@ class TwitterUser():
 			print "Deleting Tweet: " + tweet.text + " : from " + tweet.relative_created_at + " : (" + tweet.created_at + ")"
 			
 		self.explicit_tweets = []
+		self.explicit_tweets_non_objects = {}
 
 	def get_bad_tweets(self):
 		""" Returns a list of all the bad tweets
 		"""
 		self.alltweets = self.get_all_tweets()
 		self.explicit_tweets = self.check_tweets(self.alltweets)
+		self.explicit_tweets_non_objects = self.prepare_tweets_for_databse(self.explicit_tweets)
+	
 		return self.explicit_tweets
+
+	def prepare_tweets_for_databse(self, twitter_objects):
+		non_object_tweets = {}
+		for tweet in self.explicit_tweets:
+			non_object_tweets[tweet.id] = tweet.AsDict() 
+		return non_object_tweets
+
+	def update_database(self):
+		database.add_user_to_database(self.username, self.explicit_tweets_non_objects)
+
+	def post_tweets(self, text):
+		self.api.PostUpdate(text)
+		print "Posting tweet update: " + text
 
 # # For testing purposes
 # user = get_user_object('kurushdubash')
