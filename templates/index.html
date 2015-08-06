@@ -4,12 +4,21 @@
 
 {% if dirty_tweets %}
     <center>
-        <br/> 
-        <p><a class="btn btn-danger btn-xlg" href=" {{ url_for('cleanMyDirtyTweets') }}" role="button">
+        
+
+        <form action="{{ url_for('cleanMyDirtyTweets') }}" method=post>
+          <br/> 
+            <p><button class="btn btn-danger btn-xlg" type="submit" role="button">
             <i class="fa fa-trash-o fa-2x"></i>
             &nbsp;&nbsp;&nbsp;
-            Remove my Dirty Tweets!</a></p>
-        <br/>
+            Remove my Dirty Tweets!</button></p>
+
+            <label class="btn btn-danger pzt active">
+                <input type="checkbox" name="postTweet" value="1" data-id="0"> Allow CleanTweets to post how many Tweets were cleaned.
+            </label>
+          <br/>
+        </form>
+        
 
         <br/>
         <br/>

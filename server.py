@@ -88,12 +88,15 @@ def oauthorized():
     return redirect(url_for('index'))
 
 
-@app.route('/cleanMyDirtyTweets')
+@app.route('/cleanMyDirtyTweets', methods=['POST'])
 def cleanMyDirtyTweets():
     User.clean_tweets()
     global freshly_cleaned
     freshly_cleaned = True
-    User.post_tweet('CleanTweets helped me remove {0} of my Dirty Tweets! Visit www.CleanTweets.me to remove all your inappropriate and explicit Tweets!'.format(User.explicit_tweets_count))
+    print("hello")
+    print(request.form.getlist("postTweet"))
+    if request.form.getlist("postTweet"):
+        User.post_tweet('CleanTweets helped me remove {0} of my Dirty Tweets! Visit www.CleanTweets.me to remove all your inappropriate and explicit Tweets!'.format(User.explicit_tweets_count))
     return render_template('index.html')
 
 if __name__ == '__main__':
