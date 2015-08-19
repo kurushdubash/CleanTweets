@@ -14,7 +14,6 @@
 {% extends "sign_in.html" %}
 {% block body %}
 
-<div id="loading"></div>
 <div id="content">
 {% if g.user %}
 
@@ -41,5 +40,6 @@
 
 {% endif %}
 </div>
+<div id= "loading_square" class="cssload-box-loading"></div>
 
 {% endblock %}
